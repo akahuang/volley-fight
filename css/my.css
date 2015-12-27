@@ -1,0 +1,22 @@
+.navbar .nav > li {
+  float:none;
+  display:inline-block;
+  *display:inline; /* Internet Explorer 7 compatibility */
+  *zoom:1;
+  vertical-align: top;
+}
+
+.player-padding {
+  padding-right: 3px;
+  padding-left: 3px;
+}
+
+.panel-heading {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.panel-body {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
