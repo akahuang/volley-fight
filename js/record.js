@@ -1,5 +1,4 @@
-/*
- *  - RecordPage
+/*  - RecordPage
  *    - Navtab
  *      - Nav
  *    - ScoreGroup
@@ -11,18 +10,24 @@
  *      - ActionButtonGroup
  *      - ResultButtonGroup
  *    - ConfirmButtonGroup
- *
- *
- *
  */
 
 var RecordPage = React.createClass({
+  getInitialState: function() {
+    return {
+      score: {
+        host: 0,
+        guest: 0},
+      is_host_serve: true,
+      players: ["國婷", "小美", "虹熠", "周仔", "心如", "黃丹"]
+    };
+  },
   render: function() {
     return (
       <div className="container-fluid">
         <NarTab />
-        <ScoreGroup />
-        <PlayerButtonGroup />
+        <ScoreGroup score={this.state.score} is_host_serve={this.state.is_host_serve}/>
+        <PlayerButtonGroup players={this.state.players}/>
         <PerformanceButtonGroup />
         <hr />
         <ConfirmButtonGroup />
@@ -47,8 +52,8 @@ var ScoreGroup = React.createClass({
   render: function() {
     return (
       <div className="row">
-        <ScoreField header="我方分數" />
-        <ScoreField header="對方分數" />
+        <ScoreField header="我方分數" score={this.props.score["host"]} is_serve={this.props.is_host_serve}/>
+        <ScoreField header="對方分數" score={this.props.score["guest"]} is_serve={!this.props.is_host_serve} />
       </div>
     );
   }
@@ -56,11 +61,15 @@ var ScoreGroup = React.createClass({
 
 var ScoreField = React.createClass({
   render: function() {
+    var panel_class = "panel panel-default";
+    if (this.props.is_serve) {
+      panel_class += " panel-primary";
+    }
     return (
         <div className="col-md-6 col-xs-6">
-          <div className="panel panel-default">
+          <div className={panel_class}>
             <div className="panel-heading text-center">{this.props.header}</div>
-            <div className="panel-body text-center"><big>15</big></div>
+            <div className="panel-body text-center"><big>{this.props.score}</big></div>
           </div>
         </div>
     );
@@ -72,14 +81,14 @@ var PlayerButtonGroup = React.createClass({
     return (
     <div id="PlayerButtonGroup">
       <div className="row">
-        <PlayerButton />
-        <PlayerButton />
-        <PlayerButton />
+        <PlayerButton name={this.props.players[3]} />
+        <PlayerButton name={this.props.players[2]} />
+        <PlayerButton name={this.props.players[1]} />
       </div>
       <div className="row">
-        <PlayerButton />
-        <PlayerButton />
-        <PlayerButton />
+        <PlayerButton name={this.props.players[4]} />
+        <PlayerButton name={this.props.players[5]} />
+        <PlayerButton name={this.props.players[0]} />
       </div>
       <hr />
     </div>
@@ -91,7 +100,7 @@ var PlayerButton = React.createClass({
   render: function() {
     return (
         <div className="col-md-4 col-xs-4 player-padding">
-          <button type="button" className="btn btn-default btn-block">球員名字</button>
+          <button type="button" className="btn btn-default btn-block">{this.props.name}</button>
         </div>
     );
   }
