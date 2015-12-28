@@ -19,7 +19,10 @@ var RecordPage = React.createClass({
         host: 0,
         guest: 0},
       is_host_serve: true,
-      players: ["國婷", "小美", "虹熠", "周仔", "心如", "黃丹"]
+      players: ["國婷", "小美", "虹熠", "周仔", "黃丹", "心如"],
+      enabled_player: null,
+      enabled_action: null,
+      enabled_result: null,
     };
   },
   render: function() {
@@ -77,19 +80,24 @@ var ScoreField = React.createClass({
 });
 
 var PlayerButtonGroup = React.createClass({
+  getInitialState: function() {
+    return {enabled_player: null};
+  },
+  handleClick: function(button, event) {
+    var player_id = button.props.player_id;
+    var enabled_player = (this.state.enabled_player == player_id) ? null : player_id;
+    this.setState({enabled_player: enabled_player});
+  },
   render: function() {
+    var player_button_func = function(index) {
+      return <PlayerButton key={index} player_id={index}
+                           enabled={this.state.enabled_player == index}
+                           name={this.props.players[index]} onClick={this.handleClick} />;
+    }.bind(this);
     return (
     <div id="PlayerButtonGroup">
-      <div className="row">
-        <PlayerButton name={this.props.players[3]} />
-        <PlayerButton name={this.props.players[2]} />
-        <PlayerButton name={this.props.players[1]} />
-      </div>
-      <div className="row">
-        <PlayerButton name={this.props.players[4]} />
-        <PlayerButton name={this.props.players[5]} />
-        <PlayerButton name={this.props.players[0]} />
-      </div>
+      <div className="row"> {[3, 2, 1].map(player_button_func)} </div>
+      <div className="row"> {[4, 5, 0].map(player_button_func)} </div>
       <hr />
     </div>
     );
@@ -98,9 +106,12 @@ var PlayerButtonGroup = React.createClass({
 
 var PlayerButton = React.createClass({
   render: function() {
+    var btn_class = "btn btn-block " + (this.props.enabled ? "btn-primary" : "btn-default");
     return (
         <div className="col-md-4 col-xs-4 player-padding">
-          <button type="button" className="btn btn-default btn-block">{this.props.name}</button>
+          <button type="button" className={btn_class} onClick={this.props.onClick.bind(null, this)}>
+            {this.props.name}
+          </button>
         </div>
     );
   }
