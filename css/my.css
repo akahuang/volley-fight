@@ -1,11 +1,3 @@
-.navbar .nav > li {
-  float:none;
-  display:inline-block;
-  *display:inline; /* Internet Explorer 7 compatibility */
-  *zoom:1;
-  vertical-align: top;
-}
-
 .player-padding {
   padding-right: 3px;
   padding-left: 3px;
