@@ -25,10 +25,36 @@ var RecordPage = React.createClass({
     var action = this.refs.action.state.enabled_id;
     var result = this.refs.result.state.enabled_id;
     console.info("%s %s %s", player, action, result);
+
+    var new_state = Object.assign({}, this.state);
+    if (result == "得分") {
+      new_state.score.host += 1;
+      if (!this.state.is_host_serve) {
+        var player0 = new_state.players[0];
+        for (var i = 0; i < 5; i++) {
+          new_state.players[i] = this.state.players[i+1];
+        }
+        new_state.players[5] = player0;
+        new_state.is_host_serve = true;
+      }
+    } else if (result == "失分") {
+      new_state.score.guest += 1;
+      if (this.state.is_host_serve) {
+        new_state.is_host_serve = false;
+      }
+    }
+    this.setState(new_state);
+    this.unfocusButtons();
   },
   onCancelClick: function() {
+    this.unfocusButtons();
   },
   onUndoClick: function() {
+  },
+  unfocusButtons: function() {
+    this.refs.player.setState({enabled_id: null});
+    this.refs.action.setState({enabled_id: null});
+    this.refs.result.setState({enabled_id: null});
   },
   render: function() {
     return (
@@ -137,7 +163,6 @@ var ActionButtonGroup = React.createClass({
     var button_id = button.props.id;
     var enabled_id = (this.state.enabled_id == button_id) ? null : button_id;
     this.setState({enabled_id: enabled_id});
-    console.info("action: %s", this.state.enable);
   },
   render: function() {
     var action_button_func = function(id) {
@@ -183,7 +208,6 @@ var ResultButtonGroup = React.createClass({
     var button_id = button.props.id;
     var enabled_id = (this.state.enabled_id == button_id) ? null : button_id;
     this.setState({enabled_id: enabled_id});
-    console.info("result: %s", this.state);
   },
   render: function() {
     var result_button_func = function(id) {
