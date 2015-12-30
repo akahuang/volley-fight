@@ -25,15 +25,29 @@ var RecordPage = React.createClass({
       enabled_result: null,
     };
   },
+  onSubmitClick: function() {
+    var player = this.refs.PlayerButtonGroup.state.enabled_player;
+    var action = "0";//this.refs.ActionButtonGroup.state.enabled_action;
+    var result = "0";//this.refs.ResultButtonGroup.state.enabled_result;
+    console.info("%s %s %s", player, action, result);
+  },
+  onCancelClick: function() {
+  },
+  onUndoClick: function() {
+  },
   render: function() {
     return (
       <div className="container-fluid">
         <NarTab />
         <ScoreGroup score={this.state.score} is_host_serve={this.state.is_host_serve}/>
-        <PlayerButtonGroup players={this.state.players}/>
+        <PlayerButtonGroup ref={"PlayerButtonGroup"} players={this.state.players} />
         <PerformanceButtonGroup />
         <hr />
-        <ConfirmButtonGroup />
+        <div className="row">
+          <OneThirdButton onClick={this.onSubmitClick} name="確定" />
+          <OneThirdButton onClick={this.onCancelClick} name="取消" />
+          <OneThirdButton onClick={this.onUndoClick} name="復原" />
+        </div>
       </div>
     );
   }
@@ -130,9 +144,12 @@ var PerformanceButtonGroup = React.createClass({
 });
 
 var ActionButtonGroup = React.createClass({
+  getInitialState: function() {
+    return {enabled_action: null};
+  },
   render: function() {
     return (
-      <div id="ActionButtonGroup">
+      <div id="ActionButtonGroup" ref="ActionButtonGroup">
         <div className="row">
           <ActionButton name="發球" />
           <ActionButton name="攻擊" />
@@ -169,7 +186,7 @@ var ActionButton = React.createClass({
 var ResultButtonGroup = React.createClass({
   render: function() {
     return (
-      <div id="ResultButtonGroup">
+      <div id="ResultButtonGroup" ref="ResultButtonGroup">
         <div className="row">
           <ResultButton name="得分" />
           <ResultButton name="有效" />
@@ -191,22 +208,25 @@ var ResultButton = React.createClass({
   }
 });
 
-var ConfirmButtonGroup = React.createClass({
+
+var OneThirdButton = React.createClass({
   render: function() {
     return (
-      <div id="ConfirmButtonGroup">
-        <div className="row">
-          <div className="col-md-4 col-xs-4 player-padding">
-            <button type="button" className="btn btn-default btn-block">確定</button>
-          </div>
-          <div className="col-md-4 col-xs-4 player-padding">
-            <button type="button" className="btn btn-default btn-block">取消</button>
-          </div>
-          <div className="col-md-4 col-xs-4 player-padding">
-            <button type="button" className="btn btn-default btn-block">復原</button>
-          </div>
+        <div className="col-md-4 col-xs-4 player-padding">
+          <button type="button" className="btn btn-default btn-block"
+                  onClick={this.props.onClick}>{this.props.name}</button>
         </div>
-      </div>
+    );
+  }
+});
+
+var OneQuarterButton = React.createClass({
+  render: function() {
+    return (
+        <div className="col-md-3 col-xs-3 player-padding">
+          <button type="button" className="btn btn-default btn-block"
+                  onClick={this.props.onClick}>{this.props.name}</button>
+        </div>
     );
   }
 });
