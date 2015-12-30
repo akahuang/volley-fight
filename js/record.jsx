@@ -211,6 +211,7 @@ var ConfirmButtonGroup = React.createClass({
   }
 });
 
-React.render(
+ReactDOM.render(
   <RecordPage />,
-  document.getElementById('container'));
+  document.body
+);
