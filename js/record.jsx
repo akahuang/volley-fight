@@ -9,7 +9,6 @@
  *    - ActionButtonGroup
  *    - ResultButtonGroup
  */
-
 var RecordPage = React.createClass({
   getInitialState: function() {
     return {
