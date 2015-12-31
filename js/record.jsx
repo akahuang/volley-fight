@@ -16,14 +16,21 @@ var RecordPage = React.createClass({
         host: 0,
         guest: 0},
       is_host_serve: true,
-      players: ["國婷", "小美", "虹熠", "周仔", "黃丹", "心如"],
+      players: [
+          new Player(1, "國婷"),
+          new Player(2, "小美"),
+          new Player(3, "虹熠"),
+          new Player(4, "周仔"),
+          new Player(5, "黃丹"),
+          new Player(6, "心如")],
     };
   },
   onSubmitClick: function() {
-    var player = this.refs.player.state.enabled_id;
+    var player_idx = this.refs.player.state.enabled_id;
     var action = this.refs.action.state.enabled_id;
     var result = this.refs.result.state.enabled_id;
-    console.info("%s %s %s", player, action, result);
+    console.info(this.state.players[player_idx]);
+    this.state.players[player_idx].addRecord(action, result);
 
     var new_state = Object.assign({}, this.state);
     if (result == "得分") {
@@ -127,7 +134,7 @@ var PlayerButtonGroup = React.createClass({
   },
   render: function() {
     var player_button_func = function(index) {
-      return <MyButton key={index} id={index} name={this.props.players[index]}
+      return <MyButton key={index} id={index} name={this.props.players[index].name}
                        enabled={this.state.enabled_id == index}
                        button_count="3"
                        onClick={this.handleClick} />;
@@ -229,7 +236,6 @@ var MyButton = React.createClass({
     delete remain_props.button_count;
     delete remain_props.enabled;
     delete remain_props.onClick;
-    console.info("remain_props: ", remain_props);
     return (
         <div className={"button-padding " + div_class}>
           <button type="button" className={"btn btn-block" + btn_class}
