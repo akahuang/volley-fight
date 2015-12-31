@@ -50,6 +50,7 @@ var RecordPage = React.createClass({
     this.unfocusButtons();
   },
   onUndoClick: function() {
+    alert('This feature is not implemented yet');
   },
   unfocusButtons: function() {
     this.refs.player.setState({enabled_id: null});
@@ -67,9 +68,9 @@ var RecordPage = React.createClass({
         <ResultButtonGroup ref="result"/>
         <hr />
         <div className="row">
-          <OneThirdButton onClick={this.onSubmitClick} name="確定" />
-          <OneThirdButton onClick={this.onCancelClick} name="取消" />
-          <OneThirdButton onClick={this.onUndoClick} name="復原" />
+          <MyButton button_count="3" onClick={this.onSubmitClick} name="確定" />
+          <MyButton button_count="3" onClick={this.onCancelClick} name="取消" />
+          <MyButton button_count="3" onClick={this.onUndoClick} name="復原" />
         </div>
       </div>
     );
@@ -127,9 +128,10 @@ var PlayerButtonGroup = React.createClass({
   },
   render: function() {
     var player_button_func = function(index) {
-      return <PlayerButton key={index} id={index}
-                           enabled={this.state.enabled_id == index}
-                           name={this.props.players[index]} onClick={this.handleClick} />;
+      return <MyButton key={index} id={index} name={this.props.players[index]}
+                       enabled={this.state.enabled_id == index}
+                       button_count="3"
+                       onClick={this.handleClick} />;
     }.bind(this);
     return (
     <div id="PlayerButtonGroup">
@@ -137,20 +139,6 @@ var PlayerButtonGroup = React.createClass({
       <div className="row"> {[4, 5, 0].map(player_button_func)} </div>
       <hr />
     </div>
-    );
-  }
-});
-
-var PlayerButton = React.createClass({
-  render: function() {
-    var btn_class = this.props.enabled ? "btn-primary" : "btn-default";
-    return (
-        <div className="col-md-4 col-xs-4 player-padding">
-          <button type="button" className={"btn btn-block " + btn_class}
-                  onClick={this.props.onClick.bind(null, this)}>
-            {this.props.name}
-          </button>
-        </div>
     );
   }
 });
@@ -166,9 +154,10 @@ var ActionButtonGroup = React.createClass({
   },
   render: function() {
     var action_button_func = function(id) {
-      return <ActionButton key={id} id={id}
-                           enabled={this.state.enabled_id == id}
-                           name={id} onClick={this.handleClick} />;
+      return <MyButton key={id} id={id} name={id}
+                       enabled={this.state.enabled_id == id}
+                       button_count="4"
+                       onClick={this.handleClick} />;
     }.bind(this);
     return (
       <div id="ActionButtonGroup" ref="ActionButtonGroup">
@@ -211,9 +200,10 @@ var ResultButtonGroup = React.createClass({
   },
   render: function() {
     var result_button_func = function(id) {
-      return <ResultButton key={id} id={id}
-                           enabled={this.state.enabled_id == id}
-                           name={id} onClick={this.handleClick} />;
+      return <MyButton key={id} id={id} name={id}
+                       enabled={this.state.enabled_id == id}
+                       button_count="4"
+                       onClick={this.handleClick} />;
     }.bind(this);
     return (
       <div id="ResultButtonGroup" ref="ResultButtonGroup">
@@ -225,37 +215,29 @@ var ResultButtonGroup = React.createClass({
   }
 });
 
-var ResultButton = React.createClass({
+var MyButton = React.createClass({
+/* props.button_count: how many button in a row
+ * props.enabled: Is the button pressed?
+ * props.name: The text in the button
+ */
   render: function() {
-    var btn_class = this.props.enabled ? "btn-primary" : "btn-default";
+    var size = (12 / this.props.button_count).toFixed();
+    var div_class = " col-md-" + size + " col-xs-" + size;
+    var btn_class = (this.props.enabled ? " btn-primary" : " btn-default");
+
+    var remain_props = Object.assign({}, this.props);
+    delete remain_props.name;
+    delete remain_props.button_count;
+    delete remain_props.enabled;
+    delete remain_props.onClick;
+    console.info("remain_props: ", remain_props);
     return (
-        <div className="col-md-3 col-xs-3 player-padding">
-          <button type="button" className={"btn btn-block " + btn_class}
-                  onClick={this.props.onClick.bind(null, this)}>
+        <div className={"button-padding " + div_class}>
+          <button type="button" className={"btn btn-block" + btn_class}
+                  onClick={this.props.onClick.bind(null, this)}
+                  {...remain_props}>
             {this.props.name}
-          </button>
-        </div>
-    );
-  }
-});
-
-var OneThirdButton = React.createClass({
-  render: function() {
-    return (
-        <div className="col-md-4 col-xs-4 player-padding">
-          <button type="button" className="btn btn-default btn-block"
-                  onClick={this.props.onClick}>{this.props.name}</button>
-        </div>
-    );
-  }
-});
-
-var OneQuarterButton = React.createClass({
-  render: function() {
-    return (
-        <div className="col-md-3 col-xs-3 player-padding">
-          <button type="button" className="btn btn-default btn-block"
-                  onClick={this.props.onClick}>{this.props.name}</button>
+        </button>
         </div>
     );
   }
