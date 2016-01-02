@@ -10,12 +10,18 @@
  *    - ResultButtonGroup
  */
 var player_list = generatePlayerList({
-  1: "國婷",
-  2: "小美",
-  3: "虹熠",
-  4: "周仔",
-  5: "黃丹",
-  6: "心如"});
+  2: "惠平",
+  3: "國婷",
+  5: "奕萱",
+  6: "千涵",
+  7: "薏竹",
+  8: "啟心",
+  11: "黃丹",
+  12: "彥如",
+  13: "周仔",
+  14: "小美",
+  19: "心如",
+  20: "虹熠"});
 
 var RecordPage = React.createClass({
   getInitialState: function() {
@@ -24,7 +30,7 @@ var RecordPage = React.createClass({
         host: 0,
         guest: 0},
       is_host_serve: true,
-      players_number: [1, 2, 3, 4, 5, 6],
+      players_number: [3, 14, 20, 13, 11, 19],
       player_offset: 0,
     };
   },
