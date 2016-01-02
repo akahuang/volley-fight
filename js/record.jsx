@@ -23,6 +23,7 @@ var RecordPage = React.createClass({
           new Player(4, "周仔"),
           new Player(5, "黃丹"),
           new Player(6, "心如")],
+      player_offset: 0,
     };
   },
   onSubmitClick: function() {
@@ -30,17 +31,15 @@ var RecordPage = React.createClass({
     var action = this.refs.action.state.enabled_id;
     var result = this.refs.result.state.enabled_id;
     console.info(this.state.players[player_idx]);
-    this.state.players[player_idx].addRecord(action, result);
+    if (player_idx != null) {
+      this.state.players[player_idx].addRecord(action, result);
+    }
 
     var new_state = Object.assign({}, this.state);
     if (result == "得分") {
       new_state.score.host += 1;
       if (!this.state.is_host_serve) {
-        var player0 = new_state.players[0];
-        for (var i = 0; i < 5; i++) {
-          new_state.players[i] = this.state.players[i+1];
-        }
-        new_state.players[5] = player0;
+        new_state.player_offset = (new_state.player_offset + 1) % 6;
         new_state.is_host_serve = true;
       }
     } else if (result == "失分") {
@@ -68,7 +67,8 @@ var RecordPage = React.createClass({
       <div className="container-fluid">
         <NarTab />
         <ScoreGroup score={this.state.score} is_host_serve={this.state.is_host_serve}/>
-        <PlayerButtonGroup ref="player" players={this.state.players} />
+        <PlayerButtonGroup ref="player" players={this.state.players}
+                           player_offset={this.state.player_offset}/>
         <ActionButtonGroup ref="action"/>
         <p />
         <ResultButtonGroup ref="result"/>
@@ -133,7 +133,8 @@ var PlayerButtonGroup = React.createClass({
     this.setState({enabled_id: enabled_id});
   },
   render: function() {
-    var player_button_func = function(index) {
+    var player_button_func = function(position) {
+      var index = (position + this.props.player_offset) % 6;
       return <MyButton key={index} id={index} name={this.props.players[index].name}
                        enabled={this.state.enabled_id == index}
                        button_count="3"
