@@ -9,6 +9,14 @@
  *    - ActionButtonGroup
  *    - ResultButtonGroup
  */
+var player_list = generatePlayerList({
+  1: "國婷",
+  2: "小美",
+  3: "虹熠",
+  4: "周仔",
+  5: "黃丹",
+  6: "心如"});
+
 var RecordPage = React.createClass({
   getInitialState: function() {
     return {
@@ -16,23 +24,18 @@ var RecordPage = React.createClass({
         host: 0,
         guest: 0},
       is_host_serve: true,
-      players: [
-          new Player(1, "國婷"),
-          new Player(2, "小美"),
-          new Player(3, "虹熠"),
-          new Player(4, "周仔"),
-          new Player(5, "黃丹"),
-          new Player(6, "心如")],
+      players_number: [1, 2, 3, 4, 5, 6],
       player_offset: 0,
     };
   },
   onSubmitClick: function() {
     var player_idx = this.refs.player.state.enabled_id;
+    var player = player_list[this.state.players_number[player_idx]];
     var action = this.refs.action.state.enabled_id;
     var result = this.refs.result.state.enabled_id;
-    console.info(this.state.players[player_idx]);
+    console.info(this.state.players_number[player_idx]);
     if (player_idx != null) {
-      this.state.players[player_idx].addRecord(action, result);
+      player_list[this.state.players_number[player_idx]].addRecord(action, result);
     }
 
     var new_state = Object.assign({}, this.state);
@@ -67,7 +70,7 @@ var RecordPage = React.createClass({
       <div className="container-fluid">
         <NarTab />
         <ScoreGroup score={this.state.score} is_host_serve={this.state.is_host_serve}/>
-        <PlayerButtonGroup ref="player" players={this.state.players}
+        <PlayerButtonGroup ref="player" players_number={this.state.players_number}
                            player_offset={this.state.player_offset}/>
         <ActionButtonGroup ref="action"/>
         <p />
@@ -135,7 +138,8 @@ var PlayerButtonGroup = React.createClass({
   render: function() {
     var player_button_func = function(position) {
       var index = (position + this.props.player_offset) % 6;
-      return <MyButton key={index} id={index} name={this.props.players[index].name}
+      var name = player_list[this.props.players_number[index]].name;
+      return <MyButton key={index} id={index} name={name}
                        enabled={this.state.enabled_id == index}
                        button_count="3"
                        onClick={this.handleClick} />;

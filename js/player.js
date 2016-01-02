@@ -25,3 +25,12 @@ Player.prototype.popRecord = function() {
   record = this.record_history.pop();
   this.record_count[record.action][record.result] -= 1;
 }
+
+function generatePlayerList(player_table) {
+  var player_list = {};
+  for (var number in player_table) {
+    var name = player_table[number];
+    player_list[number] = new Player(number, name);
+  }
+  return player_list;
+}
