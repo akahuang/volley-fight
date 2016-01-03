@@ -44,6 +44,6 @@ var server = http.createServer(function (request, response) {
   var file_path = './public/' + (request.url == '/' ? 'index.html' : request.url);
   serveStatic(response, file_path, cache);
 });
-server.listen(3000, function() {
-  console.log('Server listening on port 3000');
+server.listen(process.env.PORT, function() {
+  console.log('Server listening on port %s', process.env.PORT);
 });
