@@ -1,0 +1,22 @@
+{
+  "name": "volley-fight",
+  "version": "1.0.0",
+  "description": "Volley game record",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akahuang/volley-fight.git"
+  },
+  "author": "akahuang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akahuang/volley-fight/issues"
+  },
+  "dependencies": {
+    "mime": "~1.2.7"
+  },
+  "homepage": "https://github.com/akahuang/volley-fight#readme"
+}
